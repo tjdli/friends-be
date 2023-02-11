@@ -1,12 +1,13 @@
-const eventsRouter = require("express").Router();
+const eRouter = require("express").Router();
+let EventPlan = require("../models/eventPlan");
 
-eventsRouter.route("/").get((req, res) => {
+eRouter.route("/").get((req, res) => {
     EventPlan.find()
         .then((events) => res.json(events))
         .catch((err) => res.status(400).json("Error: " + err));
 })
 
-eventsRouter.route("/add").post((req, res) => {
+eRouter.route("/add").post((req, res) => {
     const name = req.body.name;
     const location = req.body.location;
     const dateTime = req.body.dateTime;
@@ -31,7 +32,7 @@ eventsRouter.route("/add").post((req, res) => {
         .catch((err) => res.status(400).json("Error: " + err));
 });
 
-eventsRouter.route("/update/:id").post((req, res) => {
+eRouter.route("/update/:id").post((req, res) => {
     EventPlan.findById(req.params.id)
         .then(eventPlan => {
             eventPlan.name = req.params.name;
@@ -48,7 +49,7 @@ eventsRouter.route("/update/:id").post((req, res) => {
         .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
-eventsRouter.route("/increasePopularity/:id").post((req, res) => {
+eRouter.route("/increasePopularity/:id").post((req, res) => {
     EventPlan.findById(req.params.id)
         .then(eventPlan => {
             eventPlan.popularity = Number(eventPlan.popularity) + 1;
@@ -59,4 +60,4 @@ eventsRouter.route("/increasePopularity/:id").post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 })
 
-module.exports = eventsRouter;
+module.exports = eRouter;

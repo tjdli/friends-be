@@ -1,3 +1,8 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+let Tag = require('./tag')
+
 const eventPlanSchema = new Schema({
   name: {
     type: String,
@@ -22,9 +27,10 @@ const eventPlanSchema = new Schema({
     data: Buffer,
     contentType: String,
   },
-  tags: {
-    type: [tagSchema],
-  },
+  tags: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: Tag
+  }],
   description: {
     type: String,
     required: true,

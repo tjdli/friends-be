@@ -1,4 +1,8 @@
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
+let Tag = require('./tag')
+let EventPlan = require('./eventPlan')
 
 const userSchema = new Schema({
     username: {
@@ -26,16 +30,19 @@ const userSchema = new Schema({
     },
     phoneNumber: {
         type: String,
-        required: true,
     },
-    tags: {
-        type: [Tag],
-        required: true,
-    },
-    interests: {
-        type: [Event],
-        required: true,
-    }
+    tags: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: Tag
+        }
+    ],
+    events: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: EventPlan
+        }
+    ]
   }, {
     timestamps: true,
   });

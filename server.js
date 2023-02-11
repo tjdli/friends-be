@@ -12,7 +12,7 @@ app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true, });
-
+mongoose.set('strictQuery', false);
 const connection = mongoose.connection;
 
 connection.once('open', (err) => {
@@ -22,10 +22,13 @@ connection.once('open', (err) => {
     console.log("Successfully connected to MongoDB database");
 });
 
-const usersRouter = require('./routes/users');
+const usersRouter = require('./routes/userRoutes');
+const eventsRouter = require('./routes/eventRoutes');
+const tagsRouter = require('./routes/tagRoutes');
 
 app.use('/users', usersRouter);
 app.use('/events', eventsRouter);
+app.use('/tags', tagsRouter);
 
 app.listen(port, (err) => {
     if (err) {

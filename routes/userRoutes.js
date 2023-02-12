@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
 let User = require("../models/user");
 
 router.route("/").get((req, res) => {
@@ -7,11 +8,19 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/login").get((req, res) => {
-  const { username, password } = req.query;
-  User.findOne( username, password )
+router.route("/getByUsername").get((req, res) => {
+  User.findOne({username: req.query.username})
     .then(user => {
-      res.json(user._id.toString())
+      res.json(user)
+    })
+    .catch(err => res.status(400).json(`Error: ${err}`));
+})
+
+router.route("/login").get((req, res) => {
+  //const { username, password } = req.query;
+  User.findOne( {username: req.query.username, password: req.query.password })
+    .then(user => {
+      res.json(user)
     })
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
@@ -43,6 +52,15 @@ router.route("/:id").get((req, res) => {
     .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
+router.route("/updateTags/:id").post(async (req, res) => {
+  let ids = req.body.tags.map((tag) => {
+    return tag._id;
+  })
+  User.findByIdAndUpdate(req.params.id, {$push: {tags: {$each: ids}}})
+    .catch(err => res.status(400).json(`Error: ${err}`));
+})
+
+/*
 router.route("/update/:id").post((req, res) => {
     User.findById(req.params.id)
         .then(user => {
@@ -60,17 +78,20 @@ router.route("/update/:id").post((req, res) => {
                 .catch(err => res.status(400).json(`Error: ${err}`));
         })
         .catch(err => res.status(400).json(`Error: ${err}`));
+})*/
+
+router.route("/updateEvents/:id").post((req, res) => {
+  User.findByIdAndUpdate(req.params.id, {$push: {events: {$each: req.body.events}}})
+    .catch(err => res.status(400).json(`Error: ${err}`));
 })
 
-router.route("/update/:id/addTag").post((req, res) => {
+router.route("/update/addInterest/:id").post((req, res) => {
   User.findById(req.params.id)
     .then(user => {
-      user.tags.push(req.body.tags.split(", "));
+      user.interests.push(req.body.tags.split(", "));
       user.save()
-      .then(() => res.json("Updated user!"))
-      .catch(err => res.status(400).json(`Error: ${err}`));
+        .then(() => res.json("Added event"))
     })
-    .catch(err => res.status(400).json(`Error: ${err}`));
 })
 
 module.exports = router;

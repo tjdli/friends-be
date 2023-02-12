@@ -7,23 +7,30 @@ eRouter.route("/").get((req, res) => {
         .catch((err) => res.status(400).json("Error: " + err));
 })
 
+eRouter.route("/findByTitleAddress").get((req, res) => {
+    EventPlan.findOne({name: req.query.name, location: req.query.location})
+        .then(event=>{
+            console.log(event.json);
+            res.json(event);
+        })
+        .catch(err => res.status(400).json(`Error ${err}`));
+})
+
 eRouter.route("/add").post((req, res) => {
-    const name = req.body.name;
-    const location = req.body.location;
-    const dateTime = req.body.dateTime;
-    const image = req.body.image;
+    const name = req.body.title;
+    const location = req.body.address;
+    const dateTime = req.body.date;
+    //const image = req.body.image;
     const tags = req.body.tags;
     const description = req.body.description;
-    const popularity = req.body.popularity;
 
     const newEventPlan = new EventPlan({
         name,
         location,
         dateTime,
-        image,
+        //image,
         tags,
         description,
-        popularity
     });
 
     newEventPlan

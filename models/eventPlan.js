@@ -8,6 +8,7 @@ const eventPlanSchema = new Schema({
     type: String,
     required: true,
   },
+  /*
   location: {
     type: {
       type: String,
@@ -18,14 +19,17 @@ const eventPlanSchema = new Schema({
       type: [Number],
       required: true,
     },
+  }*/
+  location: {
+    type: String,
+    required: true,
   },
   dateTime: {
     type: Date,
     required: true,
   },
   image: {
-    data: Buffer,
-    contentType: String,
+    type: String,
   },
   tags: [{
       type: mongoose.Schema.Types.ObjectId,

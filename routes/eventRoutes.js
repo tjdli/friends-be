@@ -39,6 +39,14 @@ eRouter.route("/add").post((req, res) => {
         .catch((err) => res.status(400).json("Error: " + err));
 });
 
+eRouter.route("/:id").get((req, res) => {
+    EventPlan.findById(req.params.id)
+        .then(event => {
+            res.json(event);
+        })
+        .catch(err => res.status(400).json(`Error: ${err}`));
+})
+
 eRouter.route("/update/:id").post((req, res) => {
     EventPlan.findById(req.params.id)
         .then(eventPlan => {

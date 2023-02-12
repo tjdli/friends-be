@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const mongoose = require("mongoose");
+const EventPlan = require("../models/eventPlan");
 let User = require("../models/user");
 
 router.route("/").get((req, res) => {

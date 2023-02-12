@@ -7,21 +7,14 @@ router.route("/").get((req, res) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
-router.route("/:id").get((req, res) => {
-  User.findById(req.params.id)
-    .then(user => res.json(user))
-    .catch(err => res.status(400).json(`Error: ${err}`));
-});
-
 router.route("/login").get((req, res) => {
-  console.log(req.query);
-  User.findOne({username: req.body.username, password: req.query.password})
+  const { username, password } = req.query;
+  User.findOne( username, password )
     .then(user => {
-      //console.log(res.json(user)._id);
-      res.json(user)
+      res.json(user._id.toString())
     })
     .catch(err => res.status(400).json(`Error: ${err}`));
-})
+});
 
 router.route("/add").post((req, res) => {
   const username = req.body.username;
@@ -42,6 +35,12 @@ router.route("/add").post((req, res) => {
     .save()
     .then(() => res.json("User added!"))
     .catch((err) => res.status(400).json("Error: " + err));
+});
+
+router.route("/:id").get((req, res) => {
+  User.findById(req.params.id)
+    .then(user => res.json(user))
+    .catch(err => res.status(400).json(`Error: ${err}`));
 });
 
 router.route("/update/:id").post((req, res) => {
